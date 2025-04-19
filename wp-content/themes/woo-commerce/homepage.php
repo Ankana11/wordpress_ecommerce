@@ -51,14 +51,44 @@ $banner_button_text = get_field('banner_button_text');
         </div>
         <?php  }  ?>
 
-                <div class="mb-4"></div>
+                    <div class="mb-4"></div>
 
-                <?php $explore_popular_mtabox = get_field(selector: 'explore_category_'); ?>
-                <div class="container">
-                <h2 class="title text-center mb-4">Explore Popular Categories</h2>
-               <?php echo do_shortcode('[product_categories ids="20,17, 32,19,21" columns="6" limit="6" hide_empty="0"]'); ?>
+                    <?php $explore_popular_mtabox = get_field(selector: 'explore_category_'); ?>
+                    <div class="container">
+                    <h2 class="title text-center mb-4">Explore Popular Categories</h2>
+                    <?php
+                $parent_id = 35;
+
+                $args = array(
+                    'taxonomy'     => 'product_cat',
+                    'child_of'     => $parent_id,
+                    'hide_empty'   => false,
+                    'hierarchical' => true,
+                    'pad_counts'   => true,
+                );
+
+                $product_categories = get_terms($args);
+
+                if (!empty($product_categories) && !is_wp_error($product_categories)) {
+                    echo '<div class="custom-cat-grid">';
+                    foreach ($product_categories as $category) {
+                        
+                        $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
+                        $image_url = wp_get_attachment_url($thumbnail_id);
+                        $category_link = get_term_link($category);
+
+                        echo '<a href="' . esc_url($category_link) . '" class="cat-box">';
+                        if ($image_url) {
+                            echo '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($category->name) . '" />';
+                        }
+                        echo '<h3>' . esc_html($category->name) . '</h3>';
+                        echo '</a>';
+                    }
+                    echo '</div>';
+                }
+                ?>
                </div>
-                
+
               <div class="mb-4"></div>
                 <?php $explore_popular_mtabox = get_field(selector: 'explore_category_');
                 $banner1 = $explore_popular_mtabox['banner_image_1'];

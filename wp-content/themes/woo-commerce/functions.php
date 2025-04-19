@@ -137,17 +137,20 @@ add_action( 'widgets_init', 'woo_commerce_widgets_init' );
 /**
  * Enqueue scripts and styles.
  */
-function woo_commerce_scripts() {
-	wp_enqueue_style( 'woo-commerce-style', get_stylesheet_uri(), array(), _S_VERSION );
-	wp_style_add_data( 'woo-commerce-style', 'rtl', 'replace' );
+	function woo_commerce_scripts() {
+		wp_enqueue_style( 'woo-commerce-style', get_stylesheet_uri(), array(), _S_VERSION );
+		wp_style_add_data( 'woo-commerce-style', 'rtl', 'replace' );
 
-	wp_enqueue_script( 'woo-commerce-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+		wp_enqueue_script( 'woo-commerce-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
+		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+			wp_enqueue_script( 'comment-reply' );
+		}
 	}
-}
-add_action( 'wp_enqueue_scripts', 'woo_commerce_scripts' );
+	add_action( 'wp_enqueue_scripts', 'woo_commerce_scripts' );
+
+	add_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+
 
 /**
  * Implement the Custom Header feature.
